@@ -10,21 +10,18 @@ const Home = () => {
 
   useEffect(() => {
     setIsPending(false);
-    projectFirestore
-      .collection('cooking-recipes')
-      .get()
-      .then((snapshot) => {
-        if (snapshot.empty) {
-          setError('No recipes to load');
-          setIsPending(false);
-        } else {
-          let results = [];
-          snapshot.docs.forEach((doc) => {
-            results.push({ id: doc.id, ...doc.data() });
-          });
-          setData(results);
-        }
-      });
+    projectFirestore.collection('cooking-recipes').onSnapshot((snapshot) => {
+      if (snapshot.empty) {
+        setError('No recipes to load');
+        setIsPending(false);
+      } else {
+        let results = [];
+        snapshot.docs.forEach((doc) => {
+          results.push({ id: doc.id, ...doc.data() });
+        });
+        setData(results);
+      }
+    });
   }, []);
 
   return (
